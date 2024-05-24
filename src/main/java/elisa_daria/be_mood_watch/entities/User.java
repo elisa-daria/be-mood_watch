@@ -1,5 +1,6 @@
 package elisa_daria.be_mood_watch.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import elisa_daria.be_mood_watch.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"reviews", "watchList"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +32,14 @@ public class User {
     private List <WatchList> watchList;
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
+
+    public User(String name, String surname, String email, String password, String username, String avatarURL, Role role) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.avatarURL = avatarURL;
+        this.role = Role.USER;
+    }
 }
