@@ -33,7 +33,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    public User(String name, String surname, String email, String password, String username, String avatarURL, Role role) {
+    public User(String name, String surname, String email, String password, String username, String avatarURL) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -42,4 +42,5 @@ public class User {
         this.avatarURL = avatarURL;
         this.role = Role.USER;
     }
+
 }
