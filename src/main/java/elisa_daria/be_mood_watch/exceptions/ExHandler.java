@@ -27,10 +27,11 @@ public class ExHandler {
     public ErrorRespDTO handleNotFound(NotFoundEx ex){
         return new ErrorRespDTO(ex.getMessage(),LocalDateTime.now());
     }
+
     @ExceptionHandler(IllegalStateException.class)
     public ErrorRespDTO handleFileToBig(IllegalStateException ex){
         ex.printStackTrace();
-        return new ErrorRespDTO("file is to big.Resize!",LocalDateTime.now());
+        return new ErrorRespDTO("File is to big. Resize!",LocalDateTime.now());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

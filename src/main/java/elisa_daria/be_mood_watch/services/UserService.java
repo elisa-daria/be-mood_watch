@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,8 @@ public class UserService {
     private UserDAO userDAO;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 //    @Autowired
 //    private MailgunConfig emailSender;
@@ -39,13 +42,17 @@ public class UserService {
                     throw new BadRequestEx("Email address is already in use.");
                 }
         ));
-        User newUser = new User(payload.name(), payload.surname(), payload.email(), payload.password(), payload.username(), "https://ui-avatars.com/api/?name=" + payload.name() + "+" + payload.surname());
+        User newUser = new User(payload.name(), payload.surname(), payload.email(), passwordEncoder.encode(payload.password()), payload.username(), "https://ui-avatars.com/api/?name=" + payload.name() + "+" + payload.surname());
 //        emailSender.sendRegistrationEmail(newUser);
         return userDAO.save(newUser);
     }
 
     public User findById(long userId) {
         return this.userDAO.findById(userId).orElseThrow(() -> new NotFoundEx(userId));
+    }
+
+    public User findByEmail(String email){
+        return this.userDAO.findByEmail(email).orElseThrow(()->new NotFoundEx(email));
     }
 
 

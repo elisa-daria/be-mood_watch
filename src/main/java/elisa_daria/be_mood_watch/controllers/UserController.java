@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@Slf4j
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -26,8 +28,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //http://localhost:3002/users
-    @GetMapping("")
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<User> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size,
@@ -36,16 +39,9 @@ public class UserController {
         return this.userService.getUsers(page, size, sort_by);
     }
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public NewUserRespDTO postUser(@RequestBody @Validated NewUserDTO payload, BindingResult validation) throws Exception {
-        if (validation.hasErrors()) {
-            throw new BadRequestEx(validation.getAllErrors());
-        }
-        User newUser = this.userService.saveUser(payload);
-        return new NewUserRespDTO(newUser.getId());
-    }
-
+    @GetMapping("/me")
+    public User getMeProfile(@AuthenticationPrincipal User currentUser)
+    {return currentUser;}
 
     @GetMapping("{id}")
     public User findUserById(@PathVariable long id) {
@@ -59,13 +55,15 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser (@PathVariable long id) {this.userService.deleteUser(id);}
 
     @PatchMapping("{id}/avatar")
-    public String uploadAvatar(@RequestParam ("img")MultipartFile img,@PathVariable long id){
+    public NewUserRespDTO uploadAvatar(@RequestParam ("img")MultipartFile img,@PathVariable long id){
         try{
-            return this.userService.uploadProfilePic(id,img);
+           String updatedAvatar=this.userService.uploadProfilePic(id,img);
+            return new NewUserRespDTO(id);
         }catch (IOException e){
             throw new RuntimeException();
 

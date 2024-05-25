@@ -29,7 +29,7 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerForAuth = request.getHeader("Authorization");
         if (headerForAuth == null || !headerForAuth.startsWith("Bearer "))
-            throw new UnAuthorizedEx("Needs to be a token in Auth Header");
+            throw new UnAuthorizedEx("Authorization header is missing a token");
         String accessToken = headerForAuth.substring(7);
         jwtTools.verifyToken(accessToken);
         String id=jwtTools.extractIdFromTokenSignature(accessToken);

@@ -4,7 +4,11 @@ public class NotFoundEx extends RuntimeException {
     public NotFoundEx(long id){
         super ("Record with id: "+id+ " not found!");
     }
-    public NotFoundEx(String msg){
-        super(msg);
+
+    public NotFoundEx (String email){
+        super (email+"  not found!");
+
     }
+
+
 }
