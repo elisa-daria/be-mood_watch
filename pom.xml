@@ -85,6 +85,12 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.38.0</version>
 		</dependency>
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/com.konghq/unirest-java &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.konghq</groupId>-->
+<!--			<artifactId>unirest-java</artifactId>-->
+<!--			<version>3.14.5</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

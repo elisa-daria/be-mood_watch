@@ -1,6 +1,7 @@
 package elisa_daria.be_mood_watch.exceptions;
 
 import elisa_daria.be_mood_watch.payloads.error.ErrorRespDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class ExHandler {
     @ExceptionHandler(BadRequestEx.class)
@@ -26,6 +28,19 @@ public class ExHandler {
     public ErrorRespDTO handleNotFound(NotFoundEx ex){
         return new ErrorRespDTO(ex.getMessage(),LocalDateTime.now());
     }
+    @ExceptionHandler(IllegalStateException.class)
+    public ErrorRespDTO handleFileToBig(IllegalStateException ex){
+        ex.printStackTrace();
+        return new ErrorRespDTO("file is to big.Resize!",LocalDateTime.now());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorRespDTO handleIllegalArgumentException(IllegalArgumentException ex) {
+        ex.printStackTrace();
+        return new ErrorRespDTO("Missing a value", LocalDateTime.now());
+    }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

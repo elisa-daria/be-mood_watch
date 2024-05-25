@@ -2,9 +2,11 @@ package elisa_daria.be_mood_watch.controllers;
 
 import elisa_daria.be_mood_watch.entities.User;
 import elisa_daria.be_mood_watch.exceptions.BadRequestEx;
+import elisa_daria.be_mood_watch.payloads.error.ErrorRespDTO;
 import elisa_daria.be_mood_watch.payloads.user.NewUserDTO;
 import elisa_daria.be_mood_watch.payloads.user.NewUserRespDTO;
 import elisa_daria.be_mood_watch.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -43,7 +47,6 @@ public class UserController {
     }
 
 
-    //http://localhost:3002/users/{id}
     @GetMapping("{id}")
     public User findUserById(@PathVariable long id) {
         return this.userService.findById(id);
@@ -64,7 +67,8 @@ public class UserController {
         try{
             return this.userService.uploadProfilePic(id,img);
         }catch (IOException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException();
+
         }
     }
 }
