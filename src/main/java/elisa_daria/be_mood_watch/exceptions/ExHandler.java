@@ -1,16 +1,15 @@
 package elisa_daria.be_mood_watch.exceptions;
 
 import elisa_daria.be_mood_watch.payloads.error.ErrorRespDTO;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-@Slf4j
+
 @RestControllerAdvice
 public class ExHandler {
     @ExceptionHandler(BadRequestEx.class)
@@ -40,6 +39,18 @@ public class ExHandler {
         ex.printStackTrace();
         return new ErrorRespDTO("Missing a value", LocalDateTime.now());
     }
+
+    @ExceptionHandler(UnAuthorizedEx.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorRespDTO handleUnauthorized(UnAuthorizedEx ex){
+        return new ErrorRespDTO(ex.getMessage(),LocalDateTime.now());
+    }
+
+@ExceptionHandler(AccessDeniedException.class)
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public ErrorRespDTO handelDeniedAccess(AccessDeniedException e){
+        return new ErrorRespDTO("You don't have keys to access this area",LocalDateTime.now());
+}
 
 
     @ExceptionHandler(Exception.class)
