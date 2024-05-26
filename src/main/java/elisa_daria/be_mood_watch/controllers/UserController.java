@@ -1,19 +1,12 @@
 package elisa_daria.be_mood_watch.controllers;
-
 import elisa_daria.be_mood_watch.entities.User;
-import elisa_daria.be_mood_watch.exceptions.BadRequestEx;
-import elisa_daria.be_mood_watch.payloads.error.ErrorRespDTO;
-import elisa_daria.be_mood_watch.payloads.user.NewUserDTO;
 import elisa_daria.be_mood_watch.payloads.user.NewUserRespDTO;
 import elisa_daria.be_mood_watch.services.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
