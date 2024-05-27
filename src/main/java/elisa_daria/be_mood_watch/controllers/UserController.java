@@ -36,6 +36,17 @@ public class UserController {
     public User getMeProfile(@AuthenticationPrincipal User currentUser)
     {return currentUser;}
 
+    @PatchMapping("me/avatar")
+    public NewUserRespDTO uploadAvatar(@AuthenticationPrincipal User currentU, @RequestParam ("img")MultipartFile img){
+        try{
+            String updatedAvatar=this.userService.uploadProfilePic(currentU.getId(), img);
+            return new NewUserRespDTO(currentU.getId());
+        }catch (IOException e){
+            throw new RuntimeException();
+
+        }
+    }
+
     @GetMapping("{id}")
     public User findUserById(@PathVariable long id) {
         return this.userService.findById(id);
@@ -52,14 +63,5 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser (@PathVariable long id) {this.userService.deleteUser(id);}
 
-    @PatchMapping("{id}/avatar")
-    public NewUserRespDTO uploadAvatar(@RequestParam ("img")MultipartFile img,@PathVariable long id){
-        try{
-           String updatedAvatar=this.userService.uploadProfilePic(id,img);
-            return new NewUserRespDTO(id);
-        }catch (IOException e){
-            throw new RuntimeException();
 
-        }
-    }
 }
